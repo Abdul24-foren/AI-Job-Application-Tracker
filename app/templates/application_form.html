@@ -1,0 +1,25 @@
+{% extends "base.html" %}{% block title %}{{ page_title }}{% endblock %}
+{% block content %}
+<div class="back-link"><a href="{{ url_for('main.applications') }}">← Back to applications</a></div>
+<div class="form-heading"><div class="eyebrow">KEEP YOUR SEARCH MOVING</div><h1>{{ page_title }}</h1><p class="muted">Capture the details now. You can update the story as it unfolds.</p></div>
+<form method="post" class="panel application-form">
+  <div class="form-section"><h2>Opportunity details</h2><p>The essentials about this role.</p><div class="form-grid">
+    <label>Company name <span>*</span><input name="company" required maxlength="120" value="{{ request.form.get('company', application.company if application else '') }}" placeholder="e.g. Acme Technologies"></label>
+    <label>Job title <span>*</span><input name="role" required maxlength="120" value="{{ request.form.get('role', application.role if application else '') }}" placeholder="e.g. Python Developer"></label>
+    <label>Location<input name="location" maxlength="120" value="{{ request.form.get('location', application.location if application else '') }}" placeholder="e.g. Chennai / Remote"></label>
+    <label>Employment type<select name="job_type">{% for t in job_types %}<option {{ 'selected' if request.form.get('job_type', application.job_type if application else 'Full-time') == t else '' }}>{{ t }}</option>{% endfor %}</select></label>
+    <label>Source<input name="source" value="{{ request.form.get('source', application.source if application else '') }}" placeholder="e.g. LinkedIn, referral"></label>
+    <label>Job URL<input type="url" name="job_url" value="{{ request.form.get('job_url', application.job_url if application else '') }}" placeholder="https://…"></label>
+    <label>Salary / compensation<input name="salary" value="{{ request.form.get('salary', application.salary if application else '') }}" placeholder="e.g. ₹6–8 LPA"></label>
+    <label>Status<select name="status">{% for s in statuses %}<option {{ 'selected' if request.form.get('status', application.status if application else 'Saved') == s else '' }}>{{ s }}</option>{% endfor %}</select></label>
+  </div></div>
+  <div class="form-section"><h2>Dates & contact</h2><p>Make your next step easy to remember.</p><div class="form-grid">
+    <label>Applied on<input type="date" name="applied_on" value="{{ request.form.get('applied_on', application.applied_on if application else '') }}"></label>
+    <label>Follow-up date<input type="date" name="follow_up_on" value="{{ request.form.get('follow_up_on', application.follow_up_on if application else '') }}"></label>
+    <label>Contact person<input name="contact_name" value="{{ request.form.get('contact_name', application.contact_name if application else '') }}" placeholder="Recruiter / hiring manager"></label>
+    <label>Contact email<input type="email" name="contact_email" value="{{ request.form.get('contact_email', application.contact_email if application else '') }}" placeholder="name@company.com"></label>
+  </div></div>
+  <div class="form-section"><h2>Notes</h2><p>Interview prep, recruiter conversations, or anything worth remembering.</p><label class="full-label"><textarea name="notes" rows="5" maxlength="5000" placeholder="Add useful notes…">{{ request.form.get('notes', application.notes if application else '') }}</textarea></label></div>
+  <div class="form-actions"><a class="btn btn-ghost" href="{{ url_for('main.applications') }}">Cancel</a><button class="btn btn-primary" type="submit">{{ 'Save changes' if application else 'Save application' }} <span>→</span></button></div>
+</form>
+{% endblock %}

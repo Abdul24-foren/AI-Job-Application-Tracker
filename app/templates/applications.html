@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block title %}Applications{% endblock %}
+{% block content %}
+<div class="page-heading"><div><div class="eyebrow">OPPORTUNITY PIPELINE</div><h1>Applications</h1><p class="muted">Every opportunity, one organized place.</p></div><a class="btn btn-primary" href="{{ url_for('main.new_application') }}">＋ Add application</a></div>
+<div class="toolbar"><form class="search-form" method="get"><span>⌕</span><input name="q" value="{{ q }}" placeholder="Search company, role or location…"><select name="status"><option value="">All statuses</option>{% for s in statuses %}<option value="{{ s }}" {{ 'selected' if selected_status == s else '' }}>{{ s }}</option>{% endfor %}</select><button class="btn btn-secondary" type="submit">Filter</button></form><a class="btn btn-ghost" href="{{ url_for('main.export_csv') }}">↓ Export CSV</a></div>
+<section class="panel applications-panel">
+{% if applications %}<div class="table-wrap"><table><thead><tr><th>COMPANY / ROLE</th><th>LOCATION</th><th>TYPE</th><th>STATUS</th><th>FOLLOW UP</th><th></th></tr></thead><tbody>{% for a in applications %}<tr><td><a class="company-link" href="{{ url_for('main.detail', app_id=a.id) }}">{{ a.company }}</a><small class="table-sub">{{ a.role }}</small></td><td>{{ a.location or '—' }}</td><td>{{ a.job_type }}</td><td><span class="status status-{{ a.status|lower }}">{{ a.status }}</span></td><td>{{ a.follow_up_on or '—' }}</td><td><a class="row-arrow" href="{{ url_for('main.detail', app_id=a.id) }}">↗</a></td></tr>{% endfor %}</tbody></table></div>
+{% else %}<div class="empty-state"><div class="empty-art">⌕</div><h3>No applications found</h3><p>{% if q or selected_status %}Try changing your search or filters.{% else %}Add an opportunity to get your pipeline started.{% endif %}</p><a class="btn btn-primary" href="{{ url_for('main.new_application') }}">＋ Add application</a></div>{% endif %}
+</section>
+{% endblock %}
